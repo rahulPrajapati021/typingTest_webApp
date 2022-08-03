@@ -1,0 +1,103 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: serif;
+}
+
+.Main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Test_Box {
+    /* width: 600px;
+    height: 200px; */
+    align-self: center;
+    position: relative;
+}
+
+.testParagraphBox {
+    width: 580px;
+    height: 180px;
+    border: 1px solid red;
+    margin: 10px auto;
+}
+
+.word {
+    display: inline-block;
+    margin: 5px;
+    text-align: left;
+}
+
+.letters {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: grey;
+}
+
+#keyInput {
+    outline: none;
+    border: none;
+    background-color: transparent;
+    color: transparent;
+    position: absolute;
+    width: 580px;
+    height: 180px;
+    top: 35px;
+    cursor:default;
+}
+
+.onBlurEffect {
+    width: 580px;
+    height: 180px;
+    position: absolute;
+    top: 35px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(240, 240, 240, .7);
+}
+
+.typingCursor {
+    width: 3px;
+    height: 15px;
+    background-color: red;
+    z-index: 1;
+    position: static;
+    display: inline-block;
+    /* top: 20px;
+    left: 16px; */
+    transition: .3s all;
+}
+
+.correct {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: black;}
+
+.wrong {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: red;}
+
+
+ /* Counter part styling  */
+
+.Counter {
+    border: 1px solid red;
+    width: 50px;
+    height: 20px;
+}
+
+
+/* REsult fuction  */
+
+.Result {
+    border: 1px solid red;
+    width: 400px;
+    height: 150px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
