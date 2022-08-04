@@ -1,16 +1,22 @@
 const testParagraphBox = document.querySelector(".testParagraphBox");
+const restartKey = document.getElementById("restart");
+
 
 // this is for development period only
 
 let fetchedParagraph = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus autem harum vel sapiente asperiores! Ex iusto sequi quibusdam quas et.";
+let letters = [];
 
 // above is for development period only
-
 
 // if paragraph is fetched then do this 
 
 function populateTestParagraph() {
+
+    testParagraphBox.innerHTML = "";
+
     let data = fetchedParagraph.trim().split(" ");
+
     data.forEach((word) => {
         let htmlLetterTemplate = "";
 
@@ -29,14 +35,10 @@ function populateTestParagraph() {
     })
 }
 
-window.addEventListener("load", populateTestParagraph());
 
 
 // now let add typing functionality and check if we write correct word or wrong word
 
-//first we will grab all the letters and make them a array of letters;
-let letters = document.getElementsByClassName("letters");
-letters = Array.from(letters);
 
 // we will be using an input field in replace we also can use the window 
 // object as input
@@ -71,20 +73,21 @@ function isWritable(key) {
 let timeFlag = false;
 let time = 30;
 let typeCursor = document.getElementById("typingCursor");
+let counter = document.querySelector(".Counter");
 let typedLetters = [];
-
+let setTimeVariable, setIntervalVariable;
 
 keyInput.addEventListener("textInput", (key) => {
     if (!timeFlag) {
         timeFlag = true;
         let numCounter = time;
-        let counter = document.querySelector(".Counter");
-        setInterval(() => {
+        setIntervalVariable = setInterval(() => {
             if (numCounter > 0) {
-                counter.innerText = (--numCounter);
+                counter.innerText = (numCounter--);
             }
         }, 1000);
-        setTimeout(timeOutFunction, (time * 1000));
+
+        setTimeVariable = setTimeout(timeOutFunction, (time * 1000));
     }
     // so isWritable will check the following key is present in our array
 
@@ -145,6 +148,10 @@ keyInput.onblur = () => {
     }
 }
 
+keyInput.onfocus = () => {
+    document.querySelector(".onBlurEffect").style.display = "none";
+}
+
 //now if the timer is over then the calculate function will take over 
 
 /*
@@ -162,12 +169,12 @@ function calculateSpeed() {
 
     let timeInMin = time / 60;
 
-    let grossWpm = (totalLetters / 5) / timeInMin;
+    let grossWpm = (totalLetters / 4) / timeInMin;
 
-    let resultWPM = grossWpm - ((totalWrongLetters / 5) / timeInMin);
+    let resultWPM = grossWpm - ((totalWrongLetters / 4) / timeInMin);
 
     let resultPanel = document.querySelector(".Result");
-    
+
     let htmlTemplate = `<div>
         <div>Net Wpm = ${resultWPM}</div>
         <div>Gross Wpm = ${grossWpm}</div>
@@ -181,7 +188,7 @@ function calculateSpeed() {
 // timeout function definetion // it will work when the timeouts
 
 function timeOutFunction() {
-    
+
     calculateSpeed();
 }
 
@@ -189,7 +196,38 @@ function timeOutFunction() {
 
 // ===================================================================================
 
-window.onload = () => {
-    // keyInput.focus();
-    letters[0].before(typeCursor);
+
+let load = () => {
+
+    //fetch paragraph with fetch api
+
+
+    fetch("http://localhost:8000/paragraphs")
+        .then((res) => res.json())
+        .then((data) => {
+            fetchedParagraph = data.value;
+            populateTestParagraph();
+        }).then(() => {
+            //first we will grab all the letters and make them a array of letters;
+            letters = document.getElementsByClassName("letters");
+            letters = Array.from(letters);
+            letters[0].before(typeCursor);
+        })
+    keyInput.focus();
+}
+
+window.onload = load();
+
+
+restartKey.onclick = () => {
+    timeFlag = false;
+    time = 30;
+    console.log("restarting...")
+    clearTimeout(setTimeVariable);
+    clearInterval(setIntervalVariable);
+    counter.innerText = ""
+    let resultPanel = document.querySelector(".Result");
+    resultPanel.style.display = "none";
+    document.querySelector(".Test_Box").style.display = "block"
+    load();
 }
